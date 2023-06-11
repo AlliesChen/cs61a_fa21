@@ -122,7 +122,7 @@ def silence(score0, score1):
 
 
 def play(strategy0: Callable[[int, int], int], strategy1: Callable[[int, int], int],
-        score0=0, score1=0, dice=six_sided, goal=GOAL_SCORE, say=silence):
+         score0=0, score1=0, dice=six_sided, goal=GOAL_SCORE, say=silence):
     """Simulate a game and return the final scores of both players, with Player
     0's score first, and Player 1's score second.
 
@@ -150,7 +150,7 @@ def play(strategy0: Callable[[int, int], int], strategy1: Callable[[int, int], i
             num_rolls = strategy1(score1, score0)
             score1 += take_turn(num_rolls, score0, dice, goal)
             score1 += hog_pile(score1, score0)
-        who = next_player(who);
+        who = next_player(who)
     # END PROBLEM 5
     # (note that the indentation for the problem 6 prompt (***YOUR CODE HERE***) might be misleading)
     # BEGIN PROBLEM 6
@@ -232,6 +232,7 @@ def announce_highest(who, last_score=0, running_high=0):
     """
     assert who == 0 or who == 1, 'The who argument should indicate a player.'
     # BEGIN PROBLEM 7
+
     def say(score0, score1):
         running_score = 0
         if who == 0:
@@ -241,7 +242,8 @@ def announce_highest(who, last_score=0, running_high=0):
         if running_score - last_score <= running_high:
             return announce_highest(who, running_score, running_high)
         if running_score - last_score != 0:
-            print(f"{running_score - last_score} point(s)! That's a record gain for Player {who}!")
+            print(
+                f"{running_score - last_score} point(s)! That's a record gain for Player {who}!")
         return announce_highest(who, running_score, running_score - last_score)
     return say
     # END PROBLEM 7
@@ -339,10 +341,10 @@ def run_experiments():
     print('Max scoring num rolls for six-sided dice:', six_sided_max)
     print('always_roll(6) win rate:', average_win_rate(always_roll(6)))
 
-    #print('always_roll(8) win rate:', average_win_rate(always_roll(8)))
-    #print('picky_piggy_strategy win rate:', average_win_rate(picky_piggy_strategy))
+    # print('always_roll(8) win rate:', average_win_rate(always_roll(8)))
+    # print('picky_piggy_strategy win rate:', average_win_rate(picky_piggy_strategy))
     print('hog_pile_strategy win rate:', average_win_rate(hog_pile_strategy))
-    #print('final_strategy win rate:', average_win_rate(final_strategy))
+    # print('final_strategy win rate:', average_win_rate(final_strategy))
     "*** You may add additional experiments as you wish ***"
 
 
@@ -351,7 +353,7 @@ def picky_piggy_strategy(score, opponent_score, cutoff=8, num_rolls=6):
     returns NUM_ROLLS otherwise.
     """
     # BEGIN PROBLEM 10
-    return 6  # Remove this line once implemented.
+    return (0 if picky_piggy(opponent_score) >= cutoff else num_rolls)
     # END PROBLEM 10
 
 
@@ -361,7 +363,12 @@ def hog_pile_strategy(score, opponent_score, cutoff=8, num_rolls=6):
     Otherwise, it returns NUM_ROLLS.
     """
     # BEGIN PROBLEM 11
-    return 6  # Remove this line once implemented.
+    pick_piggy_score = picky_piggy(opponent_score)
+    if pick_piggy_score + score == opponent_score:
+        return 0
+    if pick_piggy_score >= cutoff:
+        return 0
+    return num_rolls
     # END PROBLEM 11
 
 
