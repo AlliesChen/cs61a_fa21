@@ -142,20 +142,16 @@ def autocorrect(typed_word: str, valid_words: list[str], diff_function: Callable
     'testing'
     """
     # BEGIN PROBLEM 5
-    lowest_diff = 999
     lowest_diff_idx: int | None = None
     for idx in range(len(valid_words)):
         if typed_word == valid_words[idx] or limit == 0:
             return typed_word
         if lowest_diff_idx == None:
             lowest_diff_idx = idx
-            lowest_diff = diff_function(typed_word, valid_words[idx], limit)
         else:
             lowest_diff_idx = idx if diff_function(
-                typed_word, valid_words[idx], limit) < lowest_diff else lowest_diff_idx
-            lowest_diff = diff_function(
-                typed_word, valid_words[lowest_diff_idx], limit)
-    return valid_words[lowest_diff_idx] if diff_function(typed_word, valid_words[lowest_diff_idx], limit) < limit else typed_word
+                typed_word, valid_words[idx], limit) < diff_function(typed_word, valid_words[lowest_diff_idx], limit) else lowest_diff_idx
+    return valid_words[lowest_diff_idx] if diff_function(typed_word, valid_words[lowest_diff_idx], limit) <= limit else typed_word
     # END PROBLEM 5
 
 
