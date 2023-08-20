@@ -155,7 +155,7 @@ def autocorrect(typed_word: str, valid_words: list[str], diff_function: Callable
     # END PROBLEM 5
 
 
-def feline_flips(start, goal, limit):
+def feline_flips(start: str, goal: str, limit: int):
     """A diff function for autocorrect that determines how many letters
     in START need to be substituted to create GOAL, then adds the difference in
     their lengths and returns the result.
@@ -177,8 +177,15 @@ def feline_flips(start, goal, limit):
     >>> feline_flips("rose", "hello", big_limit)   # Substitute: r->h, o->e, s->l, e->l, length difference of 1.
     5
     """
+    # reference: https://github.com/y1cunhui/cs61A-2021Fall/blob/main/proj02-cats/cats.py
     # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
+    if start == '' or goal == '':
+        return max(len(start), len(goal))
+    if start == goal:
+        return 0
+    if limit == 0 and start != goal:
+        return 1
+    return 1 + feline_flips(start[1:], goal[1:], limit - 1) if start[0] != goal[0] else feline_flips(start[1:], goal[1:], limit)
     # END PROBLEM 6
 
 
@@ -199,24 +206,26 @@ def minimum_mewtations(start, goal, limit):
     >>> minimum_mewtations("ckiteus", "kittens", big_limit) # ckiteus -> kiteus -> kitteus -> kittens
     3
     """
-    assert False, 'Remove this line'
-
-    if ______________:  # Fill in the condition
+    # reference: https://github.com/y1cunhui/cs61A-2021Fall/blob/main/proj02-cats/cats.py
+    if start == '' or goal == '':  # Fill in the condition
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        return max(len(start), len(goal))
         # END
-
-    elif ___________:  # Feel free to remove or add additional cases
+    elif start == goal:  # Feel free to remove or add additional cases
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        return 0
         # END
-
+    elif limit == 0 and start != goal:
+        return 1
+    elif start[0] == goal[0]:
+        return minimum_mewtations(start[1:], goal[1:], limit)
     else:
-        add = ...  # Fill in these lines
-        remove = ...
-        substitute = ...
+        add = minimum_mewtations(
+            start, goal[1:], limit - 1)  # Fill in these lines
+        remove = minimum_mewtations(start[1:], goal, limit - 1)
+        substitute = minimum_mewtations(start[1:], goal[1:], limit - 1)
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        return 1 + min(add, remove, substitute)
         # END
 
 
