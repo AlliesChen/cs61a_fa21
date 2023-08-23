@@ -3,7 +3,7 @@
 from utils import lower, split, remove_punctuation, lines_from_file
 from ucb import main, interact, trace
 from datetime import datetime
-from typing import Callable
+from typing import Callable, TypedDict
 
 
 ###########
@@ -189,7 +189,7 @@ def feline_flips(start: str, goal: str, limit: int):
     # END PROBLEM 6
 
 
-def minimum_mewtations(start, goal, limit):
+def minimum_mewtations(start: str, goal: str, limit: int):
     """A diff function that computes the edit distance from START to GOAL.
     This function takes in a string START, a string GOAL, and a number LIMIT.
 
@@ -242,8 +242,12 @@ FINAL_DIFF_LIMIT = 6  # REPLACE THIS WITH YOUR LIMIT
 # Phase 3 #
 ###########
 
+class UploadParams(TypedDict):
+    id: int
+    progress: float
 
-def report_progress(sofar, prompt, user_id, upload):
+
+def report_progress(sofar: list[str], prompt: list[str], user_id: int, upload: Callable[[UploadParams], None]):
     """Upload a report of your id and progress so far to the multiplayer server.
     Returns the progress so far.
 
@@ -267,19 +271,27 @@ def report_progress(sofar, prompt, user_id, upload):
     0.2
     """
     # BEGIN PROBLEM 8
-    "*** YOUR CODE HERE ***"
+    correct = 0
+    for idx in range(len(prompt)):
+        if idx < len(sofar) and sofar[idx] == prompt[idx]:
+            correct += 1
+        else:
+            break
+    ratio = correct / len(prompt)
+    upload({'id': user_id, 'progress': ratio})
+    return ratio
     # END PROBLEM 8
 
 
-def time_per_word(words, times_per_player):
+def time_per_word(words: list[str], times_per_player: list[list[int]]):
     """Given timing data, return a match data abstraction, which contains a
     list of words and the amount of time each player took to type each word.
 
     Arguments:
         words: a list of words, in the order they are typed.
         times_per_player: A list of lists of timestamps including the time
-                          the player started typing, followed by the time
-                          the player finished typing each word.
+                        the player started typing, followed by the time
+                        the player finished typing each word.
 
     >>> p = [[75, 81, 84, 90, 92], [19, 29, 35, 36, 38]]
     >>> match = time_per_word(['collar', 'plush', 'blush', 'repute'], p)
@@ -289,7 +301,7 @@ def time_per_word(words, times_per_player):
     [[6, 3, 6, 2], [10, 6, 1, 2]]
     """
     # BEGIN PROBLEM 9
-    "*** YOUR CODE HERE ***"
+    return match(words, [[times[i + 1] - times[i] for i in range(len(words))] for times in times_per_player])
     # END PROBLEM 9
 
 
